@@ -2,24 +2,37 @@
   "name": "electron-demo",
   "private": true,
   "version": "1.0.0",
-  "main": "electron/main.js",
+  "main": "./electron/main.js",
   "scripts": {
     "dev": "vite",
     "build": "NODE_ENV=production vite build",
     "preview": "vite preview",
     "electron": "electron .",
+    "electron-prod": "NODE_ENV=production electron .",
     "build:electron": "NODE_ENV=production vite build && electron-builder",
     "dist": "NODE_ENV=production electron-builder"
   },
   "build": {
+    "asar": false,
+    "files": [
+      "dist/**/*",
+      "electron/**/*",
+      "package.json"
+    ],
+    "directories": {
+      "output": "build"
+    },
     "publish": [
       {
-        "provider": "github"
+        "provider": "github",
+        "owner": "bonjs",
+        "repo": "test-demo"
       }
     ]
   },
   "dependencies": {
     "axios": "^1.8.2",
+    "electron-log": "^5.3.2",
     "electron-updater": "^6.3.9",
     "element-plus": "^2.9.6",
     "node-fetch": "^3.3.2",
