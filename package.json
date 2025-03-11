@@ -1,0 +1,33 @@
+{
+  "name": "electron-demo",
+  "private": true,
+  "version": "1.0.0",
+  "main": "electron/main.js",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "electron": "electron .",
+    "build:electron": "vite build && electron-builder"
+  },
+  "build": {
+    "publish": [
+        {
+            "provider": "github"
+        }
+    ]
+  },
+
+  "dependencies": {
+    "axios": "^1.8.2",
+    "electron-updater": "^6.3.9",
+    "element-plus": "^2.9.6",
+    "node-fetch": "^3.3.2",
+    "vue": "^3.5.13"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^5.2.1",
+    "electron": "^35.0.1",
+    "vite": "^6.2.0"
+  }
+}
