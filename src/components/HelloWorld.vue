@@ -5,7 +5,7 @@ defineProps({
   msg: String,
 })
 
-const str = ref('this is a test')
+const str = ref('v1.0.0')
 
 </script>
 

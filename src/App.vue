@@ -18,7 +18,7 @@ function indexeddb() {
 
 async function hotUpdate() {
   let result = await window.electronAPI.update();
-  console.log('data', result);
+  console.log('hostUpdate', result);
 }
 </script>
 
