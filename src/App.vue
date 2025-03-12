@@ -1,5 +1,6 @@
 <script setup>
 import HelloWorld from './components/HelloWorld.vue'
+import indexeddb from './components/indexeddb.vue'
 
 import { ref } from 'vue'
 
@@ -10,10 +11,6 @@ async function apiCall() {
   let url = 'http://jsonplaceholder.typicode.com/posts';
   data.value = await window.electronAPI.getData(url);
   console.log('data', data);
-}
-
-function indexeddb() {
-  alert('indexeddb');
 }
 
 async function hotUpdate() {
@@ -35,7 +32,7 @@ async function testUpdate() {
       <div>返回：{{ data }}</div>
     </el-tab-pane>
     <el-tab-pane label="使用前端数据库">
-      <el-button type="primary" @click="apiCall">使用前端数据库</el-button>
+      <indexeddb></indexeddb>
     </el-tab-pane>
     <el-tab-pane label="热更新">
       <el-button type="primary" @click="hotUpdate">检查版本</el-button>
