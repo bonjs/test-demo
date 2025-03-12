@@ -1,6 +1,7 @@
 <script setup>
 import HelloWorld from './components/HelloWorld.vue'
 import indexeddb from './components/indexeddb.vue'
+import printer from './components/printer.vue'
 
 import { ref } from 'vue'
 
@@ -38,7 +39,9 @@ async function testUpdate() {
       <el-button type="primary" @click="hotUpdate">检查版本</el-button>
       <el-button type="primary" @click="testUpdate">test update</el-button>
     </el-tab-pane>
-    <el-tab-pane label="Task">Task</el-tab-pane>
+    <el-tab-pane label="打印机">
+      <printer></printer>
+    </el-tab-pane>
   </el-tabs>
 </template>
 

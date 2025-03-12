@@ -1,6 +1,7 @@
 const { app, BrowserWindow, dialog } = require("electron");
 const path = require("path");
 const { autoUpdater } = require("electron-updater");
+const printer = require('electron-printer');
 
 const log = require("electron-log");
 const isProd = process.env.NODE_ENV === "production";
@@ -14,6 +15,25 @@ log.info("当前环境:", process.env.NODE_ENV);
 process.on("uncaughtException", (error) => {
   log.error("Uncaught Exception: ", error);
 });
+
+
+// 监听获取打印机列表的请求
+ipcMain.handle('get-printers', () => {
+    console.log('get-printer')
+    return printer.getPrinters(); // 返回所有可用的打印机
+});
+
+// 监听打印请求
+ipcMain.on('print-document', (_event, printData) => {
+    printer.printDirect({
+        printer: printData.printerName, // 选择的打印机
+        text: printData.content, // 需要打印的内容
+        type: 'RAW',
+        success: () => console.log('打印成功'),
+        error: (err) => console.error('打印失败:', err)
+    });
+});
+
 
 ipcMain.handle("get-data", async (event, url) => {
   log.info("main进程 getdata", url);
