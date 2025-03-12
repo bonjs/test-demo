@@ -5,13 +5,8 @@
   </el-select>
 
   <el-button type="primary" @click="print">打印</el-button>
-  <el-card style="max-width: 480px">
-    <template #header>
-      <div class="card-header">
-        <span>Card name</span>
-      </div>
-    </template>
-    <p v-for="o in 4" :key="o" class="text item">{{ 'List item ' + o }}</p>
+  <el-card style="max-width: 480px; margin: 10px">
+    <div>{{ printContent }}</div>
   </el-card>
 
 </template>
@@ -21,7 +16,7 @@ import { ref, onMounted} from 'vue'
 
 const printers = ref([]);
 const selectedPrinter = ref("");
-const printContent = ref("");
+const printContent = ref("要打印的内容");
 
 // 获取打印机列表
 async function loadPrinters() {

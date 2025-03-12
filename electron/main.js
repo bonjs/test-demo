@@ -1,7 +1,7 @@
 const { app, BrowserWindow, dialog } = require("electron");
 const path = require("path");
 const { autoUpdater } = require("electron-updater");
-const printer = require('electron-printer');
+const printer = require('@thiagoelg/node-printer');
 
 const log = require("electron-log");
 const isProd = process.env.NODE_ENV === "production";
