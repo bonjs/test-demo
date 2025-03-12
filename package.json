@@ -43,7 +43,6 @@
     "electron-updater": "^6.3.9",
     "element-plus": "^2.9.6",
     "node-fetch": "^3.3.2",
-    "node-printer": "^1.0.4",
     "vue": "^3.5.13"
   },
   "devDependencies": {

@@ -1,12 +1,12 @@
 const { app, BrowserWindow, dialog } = require("electron");
 const path = require("path");
 const { autoUpdater } = require("electron-updater");
-const printer = require('@thiagoelg/node-printer');
 
 const log = require("electron-log");
 const isProd = process.env.NODE_ENV === "production";
 
 const { ipcMain } = require("electron");
+let mainWindow ;
 
 log.info("Electron App 启动！");
 log.info("资源路径:", process.resourcesPath);
@@ -16,37 +16,50 @@ process.on("uncaughtException", (error) => {
   log.error("Uncaught Exception: ", error);
 });
 
+function ipcMainHandle() {
 
-// 监听获取打印机列表的请求
-ipcMain.handle('get-printers', () => {
+  // 监听获取打印机列表的请求
+  ipcMain.handle('get-printers', () => {
     console.log('get-printer')
-    return printer.getPrinters(); // 返回所有可用的打印机
-});
+    return mainWindow.webContents.getPrintersAsync(); // 返回所有可用的打印机
+  });
 
-// 监听打印请求
-ipcMain.on('print-document', (_event, printData) => {
-    printer.printDirect({
-        printer: printData.printerName, // 选择的打印机
-        text: printData.content, // 需要打印的内容
-        type: 'RAW',
-        success: () => console.log('打印成功'),
-        error: (err) => console.error('打印失败:', err)
-    });
-});
+  // 监听打印请求
+  ipcMain.on('print-document', (_event, printData) => {
+  // 打印页面
+    mainWindow.webContents.print({
+        silent: false,   // 是否静默打印（不弹出打印对话框）
+        deviceName: printData.printerName, // 选择的打印机
+        printBackground: true,  // 是否打印背景图
+        color: true,     // 是否彩色打印
+        margin: {
+          marginType: 'default'  // 也可以是 'none', 'printableArea', 'custom'
+        },
+        landscape: false,  // 是否横向打印
+        pagesPerSheet: 1,  // 每张纸打印的页面数
+        collate: true,     // 是否自动整理打印顺序
+      }, (success, failureReason) => {
+        if (!success) console.error('打印失败:', failureReason);
+        else console.log('打印任务已发送成功');
+      }
+    );
+  });
 
 
-ipcMain.handle("get-data", async (event, url) => {
-  log.info("main进程 getdata", url);
-  try {
-    const response = await fetch(url);
-    const data = await response.json();
-    console.log(data);
-    return data;
-  } catch (error) {
-    console.log("error", error);
-    return { error: error.message };
-  }
-});
+  ipcMain.handle("get-data", async (event, url) => {
+    log.info("main进程 getdata", url);
+    try {
+      const response = await fetch(url);
+      const data = await response.json();
+      console.log(data);
+      return data;
+    } catch (error) {
+      console.log("error", error);
+      return { error: error.message };
+    }
+  });
+}
+
 
 checkForUpdates();
 
@@ -70,7 +83,7 @@ ipcMain.handle("test-update", async (event, url) => {
 });
 
 function createWindow() {
-  const win = new BrowserWindow({
+  mainWindow = new BrowserWindow({
     width: 800,
     height: 600,
     webPreferences: {
@@ -93,20 +106,23 @@ function createWindow() {
     // let path = path.join(process.resourcesPath, 'dist', 'index.html');
     let indexPath = path.join(__dirname, "..", "dist", "index.html");
     log.info(indexPath);
-    win.loadFile(indexPath);
+    mainWindow.loadFile(indexPath);
   } else {
     // 开发模式：加载 Vite 服务器
     log.info("开发模式：加载 Vite 服务器");
-    win.loadURL("http://localhost:3000");
+    mainWindow.loadURL("http://localhost:3000");
   }
-  win.webContents.openDevTools();
+  mainWindow.webContents.openDevTools();
 }
 
 app.whenReady().then(() => {
   createWindow();
+  ipcMainHandle();
 
   app.on("activate", () => {
-    if (BrowserWindow.getAllWindows().length === 0) createWindow();
+    if (BrowserWindow.getAllWindows().length === 0) {
+      createWindow();
+    }
   });
 
   app.on("web-contents-created", (_, contents) => {
