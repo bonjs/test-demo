@@ -35,35 +35,35 @@ ipcMain.handle("update", async (event, url) => {
 
 
 function createWindow() {
-const win = new BrowserWindow({
-    width: 800,
-    height: 600,
-    webPreferences: {
-        nodeIntegration: false,   // 禁用 nodeIntegration
-        contextIsolation: true,   // 启用 contextIsolation
-        // webSecurity: false, // 禁用 Web 安全性（不推荐，安全性降低）
-        allowRunningInsecureContent: true, // 允许加载本地文件
-        additionalArguments: ['--disable-features=IsolateOrigins,site-per-process'], // 解决 CSP 问题
-        preload: path.join(__dirname, 'preload.js') // 正确的 preload.js 路径
-    }
-});
-    
+    const win = new BrowserWindow({
+        width: 800,
+        height: 600,
+        webPreferences: {
+            nodeIntegration: false,   // 禁用 nodeIntegration
+            contextIsolation: true,   // 启用 contextIsolation
+            // webSecurity: false, // 禁用 Web 安全性（不推荐，安全性降低）
+            allowRunningInsecureContent: true, // 允许加载本地文件
+            additionalArguments: ['--disable-features=IsolateOrigins,site-per-process'], // 解决 CSP 问题
+            preload: path.join(__dirname, 'preload.js') // 正确的 preload.js 路径
+        }
+    });
+        
 
-  // 加载 Vue 3 生成的 HTML 文件
-  if (app.isPackaged) {
-    // console.log('生产模式')
-    // 生产模式：加载打包后的 index.html
-    // let indexPath = path.join(process.resourcesPath, 'app.asar', 'dist', 'index.html');
-    // let path = path.join(process.resourcesPath, 'dist', 'index.html');
-    let indexPath = path.join(__dirname, '..', 'dist', 'index.html')
-    log.info(indexPath)
-    win.loadFile(indexPath); 
-  } else {
-    // 开发模式：加载 Vite 服务器
-    log.info("开发模式：加载 Vite 服务器");
-    win.loadURL("http://localhost:3000");
+    // 加载 Vue 3 生成的 HTML 文件
+    if (app.isPackaged) {
+        // console.log('生产模式')
+        // 生产模式：加载打包后的 index.html
+        // let indexPath = path.join(process.resourcesPath, 'app.asar', 'dist', 'index.html');
+        // let path = path.join(process.resourcesPath, 'dist', 'index.html');
+        let indexPath = path.join(__dirname, '..', 'dist', 'index.html')
+        log.info(indexPath)
+        win.loadFile(indexPath); 
+    } else {
+        // 开发模式：加载 Vite 服务器
+        log.info("开发模式：加载 Vite 服务器");
+        win.loadURL("http://localhost:3000");
+    }
     win.webContents.openDevTools();
-  }
 }
 
 app.whenReady().then(() => {
