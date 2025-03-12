@@ -38,11 +38,13 @@
     ]
   },
   "dependencies": {
+    "@quasar/extras": "^1.16.17",
     "axios": "^1.8.2",
     "electron-log": "^5.3.2",
     "electron-updater": "^6.3.9",
     "element-plus": "^2.9.6",
     "node-fetch": "^3.3.2",
+    "quasar": "^2.18.1",
     "vue": "^3.5.13"
   },
   "devDependencies": {
@@ -50,6 +52,7 @@
     "electron": "^35.0.1",
     "electron-builder": "^25.1.8",
     "electron-rebuild": "^3.2.9",
+    "sass-embedded": "^1.85.1",
     "vite": "^6.2.0"
   }
 }
