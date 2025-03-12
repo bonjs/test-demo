@@ -32,6 +32,20 @@ checkForUpdates();
 
 ipcMain.handle("update", async (event, url) => {
     console.log('main update')
+    log.info('main update')
+    autoUpdater.checkForUpdates();
+});
+ipcMain.handle("test-update", async (event, url) => {
+    log.info('test update')
+
+    autoUpdater.setFeedURL({
+      provider: 'github',
+      owner: 'bonjs',  // 替换为你的 GitHub 用户名
+      repo: 'test-demo',  // 替换为你的仓库名
+    });
+
+    console.log('testestseatesat')
+
     autoUpdater.checkForUpdates();
 });
 
@@ -96,6 +110,7 @@ app.on("window-all-closed", () => {
 function checkForUpdates() {
   autoUpdater.autoDownload = false; // 设置为手动下载更新
   autoUpdater.on("update-available", (info) => {
+    log.info('发现新版本')
     dialog
       .showMessageBox({
         type: "info",
@@ -104,8 +119,14 @@ function checkForUpdates() {
         buttons: ["是", "否"],
       })
       .then((result) => {
+        log.info('response:' + result.response)
         if (result.response === 0) {
+          try {
             autoUpdater.downloadUpdate();
+          } catch(e) {
+            log.info(e.message);
+          }
+            
         }
       });
   });
@@ -133,6 +154,10 @@ function checkForUpdates() {
             }
         })
       });
+  });
+
+  autoUpdater.on('download-progress', (progressObj) => {
+    info.log(`下载进度: ${progressObj.percent}%`);
   });
 
   // **如果没有新版本，提示用户**

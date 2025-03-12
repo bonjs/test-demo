@@ -20,6 +20,10 @@ async function hotUpdate() {
   let result = await window.electronAPI.update();
   console.log('hostUpdate', result);
 }
+async function testUpdate() {
+  let result = await window.electronAPI.testUpdate();
+  console.log('hostUpdate', result);
+}
 </script>
 
 <template>
@@ -35,6 +39,7 @@ async function hotUpdate() {
     </el-tab-pane>
     <el-tab-pane label="热更新">
       <el-button type="primary" @click="hotUpdate">检查版本</el-button>
+      <el-button type="primary" @click="testUpdate">test update</el-button>
     </el-tab-pane>
     <el-tab-pane label="Task">Task</el-tab-pane>
   </el-tabs>
